@@ -5,7 +5,7 @@
 From root directory run in cmd:
 
 ```
-node ast-rename.js ./react-app/src/components/ ./react-app/src/replaced-components counter replaced
+npm start -- ./react-app/src/components/ ./react-app/src/replaced-components counter replaced
 ```
 
 `./react-app/src/components/` is a directory of files which should be traversed.
@@ -19,13 +19,13 @@ node ast-rename.js ./react-app/src/components/ ./react-app/src/replaced-componen
 ## Examples to test:
 
 ```
-node ast-rename.js ./react-app/src/components/ ./react-app/src/replaced-components counterEntity replaceEntity
+npm start -- ./react-app/src/components/ ./react-app/src/replaced-components counterEntity replaceEntity
 ```
 
 ```
-node ast-rename.js ./react-app/src/components/ ./react-app/src/replaced-components countEntity replaceEntity
+npm start -- ./react-app/src/components/ ./react-app/src/replaced-components countEntity replaceEntity
 ```
 
 ```
-node ast-rename.js ./react-app/src/components/ ./react-app/src/replaced-components Entity replaced
+npm start -- ./react-app/src/components/ ./react-app/src/replaced-components Entity replaced
 ```

@@ -1,0 +1,1 @@
+Folder for source files which will be compiled to JS in dist folder.

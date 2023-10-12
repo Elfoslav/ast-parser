@@ -1,9 +1,22 @@
 {
+  "scripts": {
+    "start": "npm run build && node scripts/dist/ast-rename.js",
+    "build": "./node_modules/.bin/tsc scripts/src/ast-rename.ts --outDir scripts/dist"
+  },
   "dependencies": {
     "@babel/core": "^7.23.0",
+    "@babel/generator": "^7.23.0",
     "@babel/parser": "^7.23.0",
     "@babel/preset-env": "^7.22.20",
     "@babel/preset-react": "^7.22.15",
+    "@babel/traverse": "^7.23.2",
+    "path": "^0.12.7",
     "prettier": "^3.0.3"
+  },
+  "devDependencies": {
+    "@types/babel__generator": "^7.6.5",
+    "@types/babel__traverse": "^7.20.2",
+    "@types/node": "^20.8.4",
+    "typescript": "^5.2.2"
   }
 }
