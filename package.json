@@ -1,7 +1,7 @@
 {
   "scripts": {
     "start": "npm run build && node scripts/dist/ast-rename.js",
-    "build": "./node_modules/.bin/tsc scripts/src/ast-rename.ts --outDir scripts/dist"
+    "build": "./node_modules/.bin/tsc"
   },
   "dependencies": {
     "@babel/core": "^7.23.0",
