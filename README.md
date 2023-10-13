@@ -19,7 +19,7 @@ npm start -- ./react-app/src/components/ ./react-app/src/replaced-components cou
 ## Examples to test:
 
 ```
-npm start -- ./react-app/src/components/ ./react-app/src/replaced-components counterEntity replaceEntity
+npm start -- ./react-app/src/components/ ./react-app/src/replaced-components CounterEntity ReplaceEntity
 ```
 
 ```
@@ -27,5 +27,5 @@ npm start -- ./react-app/src/components/ ./react-app/src/replaced-components cou
 ```
 
 ```
-npm start -- ./react-app/src/components/ ./react-app/src/replaced-components Entity replaced
+npm start -- ./react-app/src/components/ ./react-app/src/replaced-components Entity Replaced
 ```

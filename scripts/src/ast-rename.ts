@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import * as parser from '@babel/parser';
-import traverse, { NodePath } from '@babel/traverse';
+import traverse, { NodePath, Node } from '@babel/traverse';
 import generate from '@babel/generator';
 import * as prettier from 'prettier';
 
@@ -15,7 +15,7 @@ const outputPath: string = process.argv[3];
 const replaceWhat: string = process.argv[4];
 const replaceBy: string = process.argv[5];
 
-const getReplaceRegex = (replaceStr: string): RegExp => new RegExp(replaceStr, 'gi');
+const getReplaceRegex = (replaceStr: string): RegExp => new RegExp(replaceStr, 'g');
 
 const generatorOptions = {
   retainLines: true,
@@ -27,25 +27,21 @@ function renameString(str: string, replaceWhat: string, replaceBy: string): stri
   return str.replace(getReplaceRegex(replaceWhat), (match) => {
     // Preserve the original capitalization of the first letter
     const firstCharIsUppercase = match[0] === match[0].toUpperCase();
+
+    if (firstCharIsUppercase) {
+      return replaceBy;
+    }
+
     const firstLetter = firstCharIsUppercase
       ? replaceBy.charAt(0).toUpperCase()
       : replaceBy.charAt(0);
-    return firstLetter + replaceBy.substr(1);
+
+    return `${firstLetter}${replaceBy.substring(1)}`;
   });
 }
 
-function replaceWhatExists(node: any): boolean {
-  return getReplaceRegex(replaceWhat).test(node.name || node.value);
-}
-
-// Define a function to rename a node (identifier or string literal)
-function renameNode(node: any, replaceWhat: string, replaceBy: string): void {
-  // Replace specified text with the new text
-  if (node.name) {
-    node.name = renameString(node.name, replaceWhat, replaceBy);
-  } else if (node.value) {
-    node.value = renameString(node.value, replaceWhat, replaceBy);
-  }
+function replaceWhatExists(text: string): boolean {
+  return getReplaceRegex(replaceWhat).test(text);
 }
 
 // Define a function to rename entities in the AST
@@ -61,14 +57,18 @@ async function renameEntitiesInFile(filePath: string, outputPath: string): Promi
   const changes: boolean[] = [];
 
   traverse(ast, {
-    enter(path: NodePath): void {
+    StringLiteral(path: NodePath<Node>) {
       const { node } = path;
-      if (path.isIdentifier()) {
-        changes.push(replaceWhatExists(node));
-        renameNode(node, replaceWhat, replaceBy);
-      } else if (path.isStringLiteral()) {
-        changes.push(replaceWhatExists(node));
-        renameNode(node, replaceWhat, replaceBy);
+      if (node.type === 'StringLiteral' && typeof node.value === 'string') {
+        changes.push(replaceWhatExists(node.value));
+        node.value = renameString(node.value, replaceWhat, replaceBy);
+      }
+    },
+    Identifier(path: NodePath<Node>) {
+      const { node } = path;
+      if (node.type === 'Identifier' && typeof node.name === 'string') {
+        changes.push(replaceWhatExists(node.name));
+        node.name = renameString(node.name, replaceWhat, replaceBy);
       }
     },
   });
